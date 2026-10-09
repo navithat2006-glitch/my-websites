@@ -1,0 +1,160 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top, #30152d 0%, #160d1b 48%, #08070d 100%);
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    overflow-x: hidden;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 35px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.top-text {
+    color: #eab5d1;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.photo-wrapper {
+    width: 100%;
+    max-width: 600px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#photoCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 56vh;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    filter:
+        drop-shadow(0 0 12px rgba(255, 135, 200, 0.25))
+        drop-shadow(0 0 35px rgba(255, 70, 160, 0.12));
+}
+
+#loading {
+    position: absolute;
+    color: #f8cce2;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.caption {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 2s ease, transform 2s ease;
+    padding: 8px 12px;
+}
+
+.caption.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.small-title {
+    color: #d9a5c1;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+}
+
+.caption h1 {
+    color: #ffe0ef;
+    font-size: clamp(27px, 5vw, 48px);
+    font-weight: normal;
+    line-height: 1.35;
+    text-shadow: 0 0 22px rgba(255, 130, 190, 0.35);
+}
+
+.subtitle {
+    color: #e9c4d8;
+    font-size: clamp(14px, 2.5vw, 18px);
+    font-style: italic;
+    letter-spacing: 1px;
+    margin-top: 16px;
+}
+
+.heart {
+    color: #ff9ecb;
+    font-size: 30px;
+    margin-top: 12px;
+    animation: heartbeat 1.5s infinite;
+}
+
+.hearts {
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 175, 215, 0.35);
+    font-size: 19px;
+    letter-spacing: 14px;
+    pointer-events: none;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@media (max-width: 600px) {
+    .page {
+        gap: 14px;
+        padding: 25px 12px 40px;
+    }
+
+    .photo-wrapper {
+        min-height: 180px;
+    }
+
+    #photoCanvas {
+        max-height: 48vh;
+    }
+
+    .top-text {
+        letter-spacing: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heart {
+        animation: none;
+    }
+}

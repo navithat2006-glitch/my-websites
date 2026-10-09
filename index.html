@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Most Beautiful Girl 💗</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="hearts" aria-hidden="true">♡　♥　♡　♥　♡</div>
+
+    <main class="page">
+        <p class="top-text">A LITTLE SURPRISE FOR YOU ✨</p>
+
+        <div class="photo-wrapper">
+            <canvas id="photoCanvas"></canvas>
+            <p id="loading">Creating something beautiful... 💗</p>
+        </div>
+
+        <section class="caption" id="caption">
+            <p class="small-title">IN A WORLD FULL OF BEAUTY...</p>
+            <h1>The Most Beautiful Girl<br>in the World 💗</h1>
+            <p class="subtitle">One of a kind, simply unforgettable ✨</p>
+            <div class="heart">♡</div>
+        </section>
+    </main>
+
+    <script>
+        const canvas = document.getElementById("photoCanvas");
+        const ctx = canvas.getContext("2d");
+        const loading = document.getElementById("loading");
+        const caption = document.getElementById("caption");
+        const image = new Image();
+
+        // IMPORTANT: This must match your photo's exact filename.
+        image.src = "photo.jpg";
+
+        image.onload = function () {
+            const maxWidth = Math.min(window.innerWidth * 0.86, 600);
+            const maxHeight = window.innerHeight * 0.56;
+
+            const ratio = Math.min(
+                maxWidth / image.width,
+                maxHeight / image.height
+            );
+
+            canvas.width = Math.round(image.width * ratio);
+            canvas.height = Math.round(image.height * ratio);
+
+            const dotSize = 4;
+            const dots = [];
+
+            for (let y = 0; y < canvas.height; y += dotSize) {
+                for (let x = 0; x < canvas.width; x += dotSize) {
+                    dots.push({
+                        x,
+                        y,
+                        delay: Math.random() * 0.7,
+                        driftX: (Math.random() - 0.5) * 100,
+                        driftY: (Math.random() - 0.5) * 100
+                    });
+                }
+            }
+
+            // Mix the dots so the picture forms in a scattered pattern.
+            for (let i = dots.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [dots[i], dots[j]] = [dots[j], dots[i]];
+            }
+
+            loading.style.display = "none";
+
+            const start = performance.now();
+            const duration = 4500;
+
+            function animate(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                dots.forEach(dot => {
+                    const p = Math.max(
+                        0,
+                        Math.min(1, progress * 1.7 - dot.delay)
+                    );
+
+                    if (p <= 0) return;
+
+                    // Ease each dot into its final position.
+                    const ease = 1 - Math.pow(1 - p, 3);
+                    const currentX = dot.x + dot.driftX * (1 - ease);
+                    const currentY = dot.y + dot.driftY * (1 - ease);
+
+                    ctx.globalAlpha = ease;
+
+                    ctx.drawImage(
+                        image,
+                        dot.x / ratio,
+                        dot.y / ratio,
+                        dotSize / ratio,
+                        dotSize / ratio,
+                        currentX,
+                        currentY,
+                        dotSize,
+                        dotSize
+                    );
+                });
+
+                ctx.globalAlpha = 1;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    caption.classList.add("visible");
+                }
+            }
+
+            requestAnimationFrame(animate);
+        };
+
+        image.onerror = function () {
+            loading.innerHTML =
+                'Photo not found 💔<br><br>' +
+                'Please check the image filename and folder.';
+        };
+    </script>
+</body>
+</html>
